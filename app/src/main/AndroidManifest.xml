@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.liberianpro">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/lib_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/lib_icon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.LiberianPro">
+        <activity android:name="com.record_book.FinalRecordActivity"></activity>
+        <activity android:name="com.return_book.FinalReturnActivity" />
+        <activity android:name="com.issue_book.FinalIssueActivity" />
+        <activity android:name="com.school.SchoolActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+
+        <activity
+            android:name="com.settings.SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name="com.category.CategoryActivity"
+            android:label="Book category"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name="com.return_book.ReturnBookActivity"
+            android:label="Return book"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name="com.record_book.RecordBookActivity"
+            android:label="Record book"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name="com.issue_book.IssueBookActivity"
+            android:label="Issue book"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name="com.signature.SignatureActivity"
+            android:label="Signature"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name="com.splash.SplashActivity"
+            android:theme="@style/Splash" />
+        <activity
+            android:name="com.signin.SignInActivity"
+            android:theme="@style/Splash" />
+        <activity
+            android:name="com.signup.SignUpActivity"
+            android:theme="@style/Splash" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
