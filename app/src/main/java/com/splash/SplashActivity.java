@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.liberianpro.R;
 import com.signin.SignInActivity;
-import com.signup.SignUpActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

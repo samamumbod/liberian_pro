@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <permission android:name="android.permission.FLASHLIGHT" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -17,9 +19,13 @@
         android:roundIcon="@mipmap/lib_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.LiberianPro">
-        <activity android:name="com.record_book.FinalRecordActivity"></activity>
-        <activity android:name="com.return_book.FinalReturnActivity" />
-        <activity android:name="com.issue_book.FinalIssueActivity" />
+
+        <activity android:name="com.record_book.FinalRecordActivity"
+            android:parentActivityName="com.record_book.RecordBookActivity"/>
+        <activity android:name="com.return_book.FinalReturnActivity"
+            android:parentActivityName="com.return_book.ReturnBookActivity"/>
+        <activity android:name="com.issue_book.FinalIssueActivity"
+            android:parentActivityName="com.issue_book.IssueBookActivity"/>
         <activity android:name="com.school.SchoolActivity" />
 
         <meta-data

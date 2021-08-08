@@ -10,13 +10,10 @@
         android:id="@+id/signature_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:backgroundColor="#ffffff"
-        app:enableSignature="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:penColor="#000000"
-        app:penSize="5dp"
-        tools:ignore="MissingClass" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.kyanogen.signatureview.SignatureView>
 </androidx.constraintlayout.widget.ConstraintLayout>

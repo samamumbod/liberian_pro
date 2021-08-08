@@ -15,7 +15,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.liberian.auth.LiberianAuth;
 import com.liberianpro.MainActivity;
 import com.liberianpro.R;
-import com.signup.SignUpActivity;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -34,10 +33,6 @@ public class SignInActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    public void signup(View view){
-        startActivity(new Intent(this, SignUpActivity.class));
-    }
-
     public void forgotPassword(View view){
         Toast.makeText(this,"Pending",Toast.LENGTH_SHORT).show();
     }
@@ -45,14 +40,12 @@ public class SignInActivity extends AppCompatActivity {
     public void login(View view){
         String emailString = email.getText().toString();
         String passwordString = password.getText().toString();
-//        SignInTask task = new SignInTask(emailString,passwordString);
-//        task.execute();
-        startActivity(new Intent(this, MainActivity.class));
-
+        SignInTask task = new SignInTask(emailString,passwordString);
+        task.execute();
     }
 
     class SignInTask extends AsyncTask<Void,Void,Void>{
-        AlertDialog dialog;
+        AlertDialog dialog = null;
         String email;
         String pwd;
         String result;
@@ -68,6 +61,8 @@ public class SignInActivity extends AppCompatActivity {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
             dialog = new AlertDialog.Builder(SignInActivity.this).create();
+            dialog.setMessage("Email does not exist.");
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Okay", (dialog, which) -> dialog.dismiss());
         }
 
         @Override
@@ -97,20 +92,12 @@ public class SignInActivity extends AppCompatActivity {
                 }
             }
             else{
-                dialog.setMessage("Email does not exist.");
-                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+               SignInActivity.this.email.setError("Email does not exist");
             }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-
             result = LiberianAuth.signin(email);
             return null;
         }
