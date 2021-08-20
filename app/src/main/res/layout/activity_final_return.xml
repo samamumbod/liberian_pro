@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
     tools:context="com.return_book.FinalReturnActivity">
+
     <ScrollView
+        android:id="@+id/return_book_scrollview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +38,7 @@
                     android:id="@+id/return_reg_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="Registration number" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,7 +58,7 @@
                     android:id="@+id/return_student_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="Student name" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,7 +78,7 @@
                     android:id="@+id/return_school"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="School/Faculty" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +98,7 @@
                     android:id="@+id/return_department"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="Department" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,7 +118,7 @@
                     android:id="@+id/return_level"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="Level" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,7 +138,7 @@
                     android:id="@+id/return_sex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="Sex" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,7 +158,7 @@
                     android:id="@+id/return_isbn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="ISBN" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -176,7 +178,7 @@
                     android:id="@+id/return_book_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="Book Title" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -196,7 +198,7 @@
                     android:id="@+id/return_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
+
                     android:hint="Author" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -216,8 +218,7 @@
                     android:id="@+id/return_issuedate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint="Issue date ( dd/mm/yyyy)" />
+                    android:hint="Issue date (yyyy-mm-dd)" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -227,17 +228,16 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/textInputLayout26"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout21"
-                app:layout_constraintBottom_toTopOf="@+id/textInputLayout26">
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout21">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/return_returndate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint="Return date (dd/mm/yyyy)" />
+                    android:hint="Return date (yyyy-mm-dd)" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -256,7 +256,7 @@
                     android:id="@+id/return_ac_returndate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Today's date (dd/mm/yyyy)" />
+                    android:hint="Today's date (yyyy-mm-dd)" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button

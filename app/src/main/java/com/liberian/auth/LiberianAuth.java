@@ -8,14 +8,16 @@ package com.liberian.auth;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -24,6 +26,8 @@ import okhttp3.Response;
  */
 public class LiberianAuth {
 
+
+    private static final MediaType MEDIA_TYPE_PDF = MediaType.parse("image/png");
 
     /**
      * This method signs in the Liberian.<br/>
@@ -34,13 +38,9 @@ public class LiberianAuth {
      * @param email
      * @return result
      */
-    public static String signin(String email){
-        String result = "";
-        try{
-            result = signinMethod(email);
-        }catch(IOException e){
-            result="error";
-        }
+    public static UserDetail signin(String email) throws IOException{
+        UserDetail result;
+        result = signinMethod(email);
         return result;
     }
 
@@ -51,7 +51,7 @@ public class LiberianAuth {
      * @return
      * @throws IOException
      */
-    private static String signinMethod(String email) throws IOException {
+    private static UserDetail signinMethod(String email) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
@@ -61,11 +61,8 @@ public class LiberianAuth {
         Response response = client.newCall(request).execute();
         String json = response.body().string();
         Gson gson = new Gson();
-        Password password1 = gson.fromJson(json,Password.class);
-        if (password1.getPassword() == null){
-            return "";
-        }
-        return password1.getPassword();
+        UserDetail userDetail1 = gson.fromJson(json, UserDetail.class);
+        return userDetail1;
     }
 
 
@@ -205,6 +202,7 @@ public class LiberianAuth {
             return status.getStatus();
     }
 
+
     /**
      * This method records book in the library into the library system.
      * @param tableName
@@ -240,6 +238,179 @@ public class LiberianAuth {
             return "error";
         }
 
+    }
+
+
+    /***
+     * This method retrieves the details of student during issue and return transactions.
+     */
+    public static StudentInfosTransaction retrieveStudentDetails(String tableName, int number) throws IOException{
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/transactions/retrieve_detail1.php?table=" +tableName+"&number="+number)
+                .method("GET", null)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        Gson gson = new Gson();
+        StudentInfosTransaction transactions = gson.fromJson(response.body().string(),StudentInfosTransaction.class);
+        return transactions;
+    }
+
+
+    /**
+     * This method retrieves the details of book during issue and return transactions
+     */
+    public static BookInfosTransaction retrieveBookDetail(String tableName, long isbn) throws IOException{
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/transactions/retrieve_detail2.php?table=" +tableName +
+                        "&isbn="+isbn)
+                .method("GET", null)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        Gson gson = new Gson();
+        BookInfosTransaction transactions = gson.fromJson(response.body().string(),BookInfosTransaction.class);
+        return transactions;
+    }
+
+
+    /**
+     * This method is used to issue the outgoing book.
+     */
+    public static String issueBook(String tableName, int regNumber, long isbn, String date1, String date2){
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/transactions/issue.php?table=" +tableName+
+                        "&reg_number="+regNumber+
+                        "&isbn="+isbn+
+                        "&issuedate="+date1+
+                        "&returndate="+date2+
+                        "&return_status="+"Not returned")
+                .method("GET", null)
+                .build();
+
+        try{
+            Response response = client.newCall(request).execute();
+            Gson gson = new Gson();
+            Status status = gson.fromJson(response.body().string(),Status.class);
+            return status.getStatus();
+        }catch (IOException e){
+            return "error";
+        }
+    }
+
+
+    /**
+     * checks if record exist
+     * @return
+     * @param tableName
+     */
+    public static boolean recordExist(String tableName,int number, long isbn ) throws IOException{
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/transactions/check_issue.php?table=" +tableName+
+                        "&number="+number+
+                        "&isbn="+isbn)
+                .method("GET", null)
+                .build();
+        Response response = client.newCall(request).execute();
+        Gson gson = new Gson();
+        CheckRecord checkRecord = gson.fromJson(response.body().string(), CheckRecord.class);
+        if (checkRecord.getNumber()>0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+    /**
+     *
+     * @param tableName
+     * @param regNumber
+     * @param isbn
+     * @throws IOException
+     */
+    public static RetrieveTransactionDate retrieveTransactionDate(String tableName, int regNumber, long isbn) throws IOException{
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/transactions/retrieve_transaction.php?table=" +tableName+
+                        "&number="+regNumber+
+                        "&isbn="+isbn)
+                .method("GET", null)
+                .build();
+        Response response = client.newCall(request).execute();
+        Gson gson = new Gson();
+
+        RetrieveTransactionDate r = gson.fromJson(response.body().string(), RetrieveTransactionDate.class);
+        return r;
+    }
+
+
+    /**
+     *
+     * @param tableName
+     * @param number
+     * @param isbn
+     * @param todaysDate
+     * @param returnStatus
+     * @throws IOException
+     */
+    public static String returnBook(String tableName, int number, long isbn, String todaysDate, String returnStatus) throws IOException{
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/transactions/return.php?table=" +tableName+
+                        "&number="+number+
+                        "&isbn="+isbn+
+                        "&ac_return_date="+todaysDate+
+                        "&return_status="+returnStatus)
+                .method("GET", null)
+                .build();
+        Response response = client.newCall(request).execute();
+        Gson gson = new Gson();
+        Status status = gson.fromJson(response.body().string(),Status.class);
+        return status.getStatus();
+    }
+
+
+
+
+    public static String saveSignature(File file1, String email) throws IOException {
+
+        String serverURL = "https://www.mshelter.tech/liberian/setting/setting.php?email="+email;
+
+        //post request to send file
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("file", "name", RequestBody.create(MEDIA_TYPE_PDF, file1))
+                .build();
+
+        Request request = new Request.Builder().url(serverURL)
+                .post(requestBody).build();
+
+        Response response = client.newCall(request).execute();
+        String result = null;
+
+        if (!response.isSuccessful()) {
+            throw new IOException("Unexpected code " + response);
+        }
+        else{
+            Gson gson = new Gson();
+            Status status = gson.fromJson(response.body().string(),Status.class);
+            result = status.getStatus();
+        }
+        return result;
     }
 
 

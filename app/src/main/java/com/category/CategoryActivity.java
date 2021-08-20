@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
 
+    static String tableName="";
     static RecyclerView recyclerView;
     static CategoryAdapter categoryAdapter;
     static List<CategoryJson> categoryList= new ArrayList<>();
@@ -44,6 +46,9 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
         recyclerView = findViewById(R.id.category_list);
         progressBar = findViewById(R.id.progressBar3);
+
+        SharedPreferences preferences = getSharedPreferences("Liberian",MODE_PRIVATE);
+        tableName = preferences.getString("table","");
 
         RetrieveBookTask task = new RetrieveBookTask(CategoryActivity.this);
         task.execute();
@@ -120,7 +125,7 @@ public class CategoryActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
 
             try {
-                result = LiberianAuth.addCategory("uba",category);
+                result = LiberianAuth.addCategory(tableName,category);
             } catch (IOException e) {
                 result = "error";
             }
@@ -130,12 +135,12 @@ public class CategoryActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
-            if (result == "Success"){
+            if (result.equals("Success")){
                 Toast.makeText(context,"Book category added",Toast.LENGTH_SHORT).show();
             }
-            else if (result == "Failed"){
+            else if (result.equals("Failed")){
                 Toast.makeText(context,"Book category already exist",Toast.LENGTH_SHORT).show();
-            } else if (result == "error"){
+            } else if (result.equals("error")){
                 Toast.makeText(context,"Ooops network problem",Toast.LENGTH_SHORT).show();
             }
 
@@ -165,7 +170,7 @@ public class CategoryActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             try{
-                list = LiberianAuth.retrieveCategory("uba");
+                list = LiberianAuth.retrieveCategory(tableName);
             }catch (IOException e){
                 result = "error";
             }

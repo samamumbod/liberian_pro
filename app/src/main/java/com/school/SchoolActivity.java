@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import java.util.List;
 
 public class SchoolActivity extends AppCompatActivity {
 
+    static String tableName="";
     static List<SchoolJson> schoolList = new ArrayList<>();
     static SchoolAdapter schoolAdapter;
     static RecyclerView recyclerView;
@@ -45,6 +47,9 @@ public class SchoolActivity extends AppCompatActivity {
         setContentView(R.layout.activity_school);
         recyclerView = findViewById(R.id.sch_recycler);
         progressBar = findViewById(R.id.progressBar2);
+
+        SharedPreferences preferences = getSharedPreferences("Liberian",MODE_PRIVATE);
+        tableName = preferences.getString("table","");
 
         RetrieveSchoolTask task = new RetrieveSchoolTask(SchoolActivity.this);
         task.execute();
@@ -120,7 +125,7 @@ public class SchoolActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                list = LiberianAuth.retrieveSchool("uba");
+                list = LiberianAuth.retrieveSchool(tableName);
             } catch (IOException e) {
                 result = "error";
             }
@@ -178,7 +183,7 @@ public class SchoolActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                result = LiberianAuth.addSchool("uba",school,meaning);
+                result = LiberianAuth.addSchool(tableName,school,meaning);
             } catch (IOException e) {
                 result = "error";
             }

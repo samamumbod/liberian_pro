@@ -44,12 +44,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
                 case 1:
                     break;
                 case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
                     Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                    String[] recipients={"sama@mshelter.tech"};
+                    String[] recipients={"prologjmaster@gmail.com"};
                     emailIntent.putExtra(Intent.EXTRA_EMAIL, recipients);
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
                     emailIntent.putExtra(Intent.EXTRA_TEXT, "");

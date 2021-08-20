@@ -1,6 +1,7 @@
 package com.liberianpro;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
                     v.getContext().startActivity(new Intent(v.getContext(), SettingsActivity.class));
                     break;
                 case "Log out":
+                    SharedPreferences preferences = v.getContext().getSharedPreferences("Liberian",v.getContext().MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("activity","signin");
+                    editor.apply();
                     v.getContext().startActivity(new Intent(v.getContext(), SignInActivity.class));
                     break;
                 case "School":
