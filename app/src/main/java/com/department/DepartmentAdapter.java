@@ -1,4 +1,4 @@
-package com.category;
+package com.department;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,56 +11,55 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.liberian.auth.CategoryJson;
+
 import com.liberian.auth.LiberianAuth;
 import com.liberianpro.R;
 
 import java.io.IOException;
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryHolder>{
+public class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.DepartmentHolder>{
 
-    List<CategoryJson> categoryList;
+    List<Department> departmentList;
 
-    public CategoryAdapter(List<CategoryJson> categoryList) {
-        this.categoryList = categoryList;
+    public DepartmentAdapter(List<Department> departmentList) {
+        this.departmentList = departmentList;
     }
 
     @NonNull
     @Override
-    public CategoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DepartmentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.category_layout,parent,false);
-        return (new CategoryHolder(view));
+        View view = inflater.inflate(R.layout.department_layout,parent,false);
+        return (new DepartmentAdapter.DepartmentHolder(view));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryHolder holder, int position) {
-        holder.categoryTextView.setText(categoryList.get(position).getCategory());
-        holder.delete.setOnClickListener(v -> {
-            DeleteTask task = new DeleteTask(v.getContext(), categoryList.get(position).getCategory());
+    public void onBindViewHolder(@NonNull DepartmentHolder holder, int position) {
+        holder.departmentTextView.setText(departmentList.get(position).getDepartment());
+        holder.delete.setOnClickListener(v->{
+            DeleteTask task = new DeleteTask(v.getContext(), departmentList.get(position).getDepartment());
             task.execute();
         });
     }
 
+
     @Override
     public int getItemCount() {
-        return categoryList.size();
+        return departmentList.size();
     }
 
 
-    class CategoryHolder extends RecyclerView.ViewHolder{
-
-        TextView categoryTextView;
+    class DepartmentHolder extends RecyclerView.ViewHolder{
+        TextView departmentTextView;
         ImageButton delete;
 
-        public CategoryHolder(@NonNull View itemView) {
+        public DepartmentHolder(@NonNull View itemView) {
             super(itemView);
-            categoryTextView =  itemView.findViewById(R.id.textView5);
-            delete = itemView.findViewById(R.id.imageButton);
+            departmentTextView = itemView.findViewById(R.id.textView20);
+            delete = itemView.findViewById(R.id.imageButton5);
         }
     }
 
@@ -82,31 +81,31 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             super.onPreExecute();
             SharedPreferences preferences = context.getSharedPreferences("Liberian",context.MODE_PRIVATE);
             tableName = preferences.getString("table","");
-            Toast.makeText(context,"Removing book category",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Removing department",Toast.LENGTH_SHORT).show();
         }
+
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                result = LiberianAuth.removeCategory(tableName, item);
+                result = LiberianAuth.removeDepartments(tableName, item);
             }
             catch (IOException e) {
                 result = "error";
             }
-
             return null;
         }
+
 
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
-
             if (result.equals("Success")){
-                Toast.makeText(context,"Book category removed.",Toast.LENGTH_SHORT).show();
-                CategoryActivity.restart(context);
+                Toast.makeText(context,"Department removed.",Toast.LENGTH_SHORT).show();
+                DepartmentActivity.restart(context);
             }
             else if (result.equals("Failed")){
-                Toast.makeText(context,"Book category in use.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Department in use.",Toast.LENGTH_SHORT).show();
             }
             else if (result.equals("error")){
                 Toast.makeText(context,"Ooops network problem.",Toast.LENGTH_SHORT).show();

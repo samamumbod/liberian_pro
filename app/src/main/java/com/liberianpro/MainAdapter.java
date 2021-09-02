@@ -13,6 +13,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.category.CategoryActivity;
+import com.department.Department;
+import com.department.DepartmentActivity;
 import com.issue_book.IssueBookActivity;
 import com.school.SchoolActivity;
 import com.settings.SettingsActivity;
@@ -47,7 +49,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
         mainHolder.constraintLayout.setOnClickListener(v -> {
             switch (options.get(i).getLabel()){
                 case "Record book":
-                    v.getContext().startActivity(new Intent(v.getContext(), RecordBookActivity.class));
+                    Intent intent = new Intent(v.getContext(), RecordBookActivity.class);
+                    intent.putExtra("update","no");
+                    v.getContext().startActivity(intent);
+                    break;
+                case "Update book":
+                    Intent in = new Intent(v.getContext(), RecordBookActivity.class);
+                    in.putExtra("update","yes");
+                    v.getContext().startActivity(in);
                     break;
                 case "Issue book":
                     v.getContext().startActivity(new Intent(v.getContext(), IssueBookActivity.class));
@@ -55,7 +64,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
                 case "Return book":
                     v.getContext().startActivity(new Intent(v.getContext(), ReturnBookActivity.class));
                     break;
-                case "Category":
+                case "Book category":
                     v.getContext().startActivity(new Intent(v.getContext(), CategoryActivity.class));
                     break;
                 case "Signature":
@@ -73,6 +82,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
                     break;
                 case "School":
                     v.getContext().startActivity(new Intent(v.getContext(), SchoolActivity.class));
+                    break;
+                case "Department":
+                    v.getContext().startActivity(new Intent(v.getContext(), DepartmentActivity.class));
                     break;
                 default:
                     break;

@@ -1,10 +1,9 @@
-package com.record_book;
+package com.update_book;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,11 +24,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-
+import com.issue_book.FinalIssueActivity;
+import com.liberian.auth.Book;
+import com.liberian.auth.BookInfosTransaction;
 import com.liberian.auth.CategoryJson;
 import com.liberian.auth.LiberianAuth;
+import com.liberian.auth.StudentInfosTransaction;
 import com.liberianpro.R;
+import com.record_book.RecordBookActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,48 +41,60 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FinalRecordActivity extends AppCompatActivity {
+public class UpdateBookActivity extends AppCompatActivity {
 
     int counter =1;
     Timer timer = new Timer();
     List<String> categoryList = new ArrayList();
     String tableName="";
+    Book book;
+    Book book1 = new Book();
+    RetrieveBookDetails retrieveBookTask = null;
     EditText isbnField;
     EditText bookTitileField;
     EditText authorField;
     EditText publishYearField;
     EditText copiesField;
+    EditText bookCategoryField;
     Spinner bookCategorySpinner;
     ImageButton decrementButton;
     ImageButton incrementButton;
-    Button saveButton;
-    ArrayAdapter<String> adapter;
+    ImageButton categoryButton;
+    Button updateButton;
+
+    ArrayAdapter<String> adapter = null;
+
     SaveBookToDatabaseTask task = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_final_record);
-        categoryList.add(" -- Select --");
+        setContentView(R.layout.activity_update_book);
 
         SharedPreferences preferences = getSharedPreferences("Liberian",MODE_PRIVATE);
         tableName = preferences.getString("table","");
 
-        isbnField = findViewById(R.id.isbn_field);
-        bookTitileField = findViewById(R.id.book_title_field);
-        authorField = findViewById(R.id.author_field);
-        publishYearField = findViewById(R.id.publish_year_field);
-        bookCategorySpinner = findViewById(R.id.spinner);
-        copiesField = findViewById(R.id.copies_field);
+        isbnField = findViewById(R.id.update_isbn_field);
+        bookTitileField = findViewById(R.id.update_book_title_field);
+        authorField = findViewById(R.id.update_author_field);
+        publishYearField = findViewById(R.id.update_publish_year_field);
+        copiesField = findViewById(R.id.update_copies_field);
+        bookCategoryField = findViewById(R.id.update_category);
         decrementButton = findViewById(R.id.decrement_button);
         incrementButton = findViewById(R.id.increment_button);
-        saveButton = findViewById(R.id.save_button);
+        updateButton = findViewById(R.id.update_button);
+        categoryButton = findViewById(R.id.imageButton6);
 
+        categoryList.add(" -- Select -- ");
         isbnField.setFocusable(false);
         copiesField.setFocusable(false);
+        bookCategoryField.setFocusable(false);
 
         String ISBN = getIntent().getStringExtra("isbn");
-        isbnField.setText(ISBN);
+        if (isDigit(ISBN)){
+            retrieveBookTask = new RetrieveBookDetails(ISBN, this);
+            retrieveBookTask.execute();
+        }
 
 
         callAsynchronousTask();
@@ -100,14 +116,27 @@ public class FinalRecordActivity extends AppCompatActivity {
         dailog.setTitle("Error");
         dailog.setButton(DialogInterface.BUTTON_POSITIVE, "Okay", (dialog, which) -> dialog.dismiss());
 
-        saveButton.setOnClickListener(v -> {
+        updateButton.setOnClickListener(v -> {
             try{
                 if (!isbnField.getText().toString().isEmpty() && !bookTitileField.getText().toString().isEmpty()
                         && !authorField.getText().toString().isEmpty() && !publishYearField.getText().toString().isEmpty()
-                        && bookCategorySpinner.getSelectedItemPosition()!=0 && !bookCategorySpinner.getAdapter().isEmpty()
+                        && !bookCategoryField.getText().toString().isEmpty()
                         && isDigit(isbnField.getText().toString()) && isDigit(publishYearField.getText().toString())){
-                    task = new SaveBookToDatabaseTask(v.getContext(),tableName);
-                    task.execute();
+
+                    book1.setAuthor(authorField.getText().toString());
+                    book1.setIsbn(Long.parseLong(isbnField.getText().toString()));
+                    book1.setBooktitle(bookTitileField.getText().toString());
+                    book1.setPublish_year(Integer.parseInt(publishYearField.getText().toString()));
+                    book1.setBook_category(bookCategoryField.getText().toString());
+                    book1.setCopies(Integer.parseInt(copiesField.getText().toString()));
+
+                    if (book.compare(book,book1)!=1){
+                        task = new SaveBookToDatabaseTask(v.getContext(),tableName);
+                        task.execute();
+                    }
+                    else{
+                        Toast.makeText(v.getContext(),"No change",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
                     dailog.show();
@@ -116,7 +145,39 @@ public class FinalRecordActivity extends AppCompatActivity {
                 dailog.show();
             }
         });
+
+
+        categoryButton.setOnClickListener(v->{
+            showBookCategoryDialog(v.getContext());
+        });
+
     }
+
+
+    private void showBookCategoryDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view =  inflater.inflate(R.layout.book_category_layout,null);
+
+        builder.setTitle("Book category");
+        builder.setView(view);
+        bookCategorySpinner  = view.findViewById(R.id.spinner2);
+        if (adapter!=null){
+            bookCategorySpinner.setAdapter(adapter);
+        }
+
+        builder.setPositiveButton("Add", (dialog1, which) -> {
+            if (bookCategorySpinner.getSelectedItemPosition() != 0){
+                bookCategoryField.setText(bookCategorySpinner.getSelectedItem().toString());
+            }
+        }).setNegativeButton("Cancel", (dialog1, which) -> {
+            dialog1.dismiss();
+        });
+
+        final AlertDialog dialog =  builder.create();
+        dialog.show();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,30 +193,33 @@ public class FinalRecordActivity extends AppCompatActivity {
             return true;
         }
         else if (item.getItemId() == android.R.id.home){
-            startActivity(new Intent(this,RecordBookActivity.class));
+            startActivity(new Intent(this, RecordBookActivity.class));
             return true;
         }
         return false;
     }
-
 
     @Override
     public void onBackPressed() {
         if (task !=null){
             task.cancel(true);
         }
+
+        if (retrieveBookTask!=null){
+            retrieveBookTask.cancel(true);
+        }
         super.onBackPressed();
     }
+
 
     /**
      * This method saves the book information into the database of the institute.
      */
-    class SaveBookToDatabaseTask extends AsyncTask<Void,Void,Void>{
+    class SaveBookToDatabaseTask extends AsyncTask<Void,Void,Void> {
         String result;
         Context context;
         ProgressDialog progressDialog;
         AlertDialog dialog = null;
-        String selectedItem;
         String tableName;
 
         public SaveBookToDatabaseTask(Context context, String tableName) {
@@ -167,7 +231,7 @@ public class FinalRecordActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Saving...");
+            progressDialog.setMessage("Updating...");
             progressDialog.setCancelable(true);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setIndeterminate(false);
@@ -175,20 +239,20 @@ public class FinalRecordActivity extends AppCompatActivity {
             dialog = new AlertDialog.Builder(context).create();
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Okay", (dialog, which) -> dialog.dismiss());
 
-            selectedItem = bookCategorySpinner.getSelectedItem().toString();
+
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
-            result = LiberianAuth.recordBook(tableName,
+            result = LiberianAuth.updateBook(tableName,
                     Long.parseLong(isbnField.getText().toString()),
                     bookTitileField.getText().toString(),
                     authorField.getText().toString(),
                     Integer.parseInt(publishYearField.getText().toString()),
-                    selectedItem,
+                    bookCategoryField.getText().toString(),
                     Integer.parseInt(copiesField.getText().toString())
-                   );
+            );
             return null;
         }
 
@@ -208,19 +272,18 @@ public class FinalRecordActivity extends AppCompatActivity {
                 dialog.setMessage("Ooops network problem");
                 dialog.show();
             }
-            resetFields(bookCategorySpinner,isbnField,
-                    bookTitileField,authorField,publishYearField,copiesField);
+            resetFields(isbnField,
+                    bookTitileField,authorField,publishYearField,copiesField,bookCategoryField);
             counter =1;
             copiesField.setText(String.valueOf(counter));
         }
     }
 
 
-    public void resetFields(Spinner spinner, EditText... editTexts){
+    public void resetFields( EditText... editTexts){
         for (EditText editText : editTexts) {
             editText.setText("");
         }
-        spinner.setSelection(0);
     }
 
 
@@ -234,8 +297,13 @@ public class FinalRecordActivity extends AppCompatActivity {
         EditText editText = view.findViewById(R.id.dialog_isbn_field);
         builder.setPositiveButton("Add", (dialog1, which) -> {
             String result = editText.getText().toString();
-            isbnField.setText(result);
-
+            if (isDigit(result)){
+                retrieveBookTask = new RetrieveBookDetails(result, context);
+                retrieveBookTask.execute();
+            }
+            else{
+                Toast.makeText(context,"Invalid ISBN",Toast.LENGTH_SHORT).show();
+            }
         }).setNegativeButton("Cancel", (dialog1, which) -> {
             dialog1.dismiss();
         });
@@ -263,6 +331,16 @@ public class FinalRecordActivity extends AppCompatActivity {
     }
 
 
+    private boolean isDigit(String number){
+        try{
+            Long.parseLong(number);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+
     /**
      * This method laods data into spinner remotely
      */
@@ -282,17 +360,7 @@ public class FinalRecordActivity extends AppCompatActivity {
                 });
             }
         };
-        timer.schedule(doAsynchronousTask, 0, 2000); //execute in every 50000 ms
-    }
-
-
-    private boolean isDigit(String number){
-        try{
-            Long.parseLong(number);
-            return true;
-        }catch (Exception e){
-            return false;
-        }
+        timer.schedule(doAsynchronousTask, 0, 2000);
     }
 
 
@@ -302,8 +370,7 @@ public class FinalRecordActivity extends AppCompatActivity {
     class RetrieveBookTask extends AsyncTask<Void,Void,Void>{
 
         List<CategoryJson> list;
-
-        String result;
+        String result = "";
         String tableName;
         Context context;
 
@@ -315,13 +382,13 @@ public class FinalRecordActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try{
                 list = LiberianAuth.retrieveCategory(tableName);
+
             }catch (IOException e){
                 result = "error";
             }
@@ -329,14 +396,13 @@ public class FinalRecordActivity extends AppCompatActivity {
                 if (categoryList.size()>1){
 
                 }
-                else{
+                else {
                     if (list!=null){
                         for (CategoryJson item: list){
                             categoryList.add(item.getCategory());
                         }
                     }
                 }
-
             }
             return null;
         }
@@ -344,14 +410,82 @@ public class FinalRecordActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
-            if (categoryList.size()>1){
-                adapter = new ArrayAdapter(context,R.layout.my_selected_item,categoryList);
-                adapter.setDropDownViewResource(R.layout.my_dropdown_item);
-                adapter.notifyDataSetChanged();
-                bookCategorySpinner.setAdapter(adapter);
-                timer.cancel();
+                if (categoryList.size()>1){
+                    adapter = new ArrayAdapter(context,R.layout.my_selected_item,categoryList);
+                    adapter.setDropDownViewResource(R.layout.my_dropdown_item);
+                    adapter.notifyDataSetChanged();
+                    timer.cancel();
+                }
+        }
+    }
+
+
+    /**
+     * This class retrieves the details of student and book for the issueing of the desired
+     * book.
+     */
+    class RetrieveBookDetails extends AsyncTask<Void,Void,Void>{
+
+        String isbn;
+        String result;
+        Context context;
+        ProgressDialog progressDialog;
+
+        public RetrieveBookDetails(String isbn, Context context) {
+            this.isbn = isbn;
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Retrieving information");
+            progressDialog.setCancelable(true);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setIndeterminate(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try{
+                book = LiberianAuth.retrieveBook(tableName,Long.parseLong(isbn));
+            }catch (Exception e){
+                result = "error";
             }
 
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            progressDialog.dismiss();
+            if ("error".equals(result)){
+                Toast.makeText(UpdateBookActivity.this,"Ooops network error",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                if (book!=null){
+                    isbnField.setText(book.getIsbn());
+                    bookTitileField.setText(book.getBooktitle());
+                    authorField.setText(book.getAuthor());
+                    publishYearField.setText(book.getPublish_year());
+                    bookCategoryField.setText(book.getBook_category());
+                    copiesField.setText(book.getCopies());
+                    counter = Integer.parseInt(book.getCopies());
+                }
+                else{
+                    isbnField.setText("");
+                    bookTitileField.setText("");
+                    authorField.setText("");
+                    publishYearField.setText("");
+                    bookCategoryField.setText("");
+                    copiesField.setText("1");
+                    counter = 1;
+                    Toast.makeText(UpdateBookActivity.this,"Book not found",Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }

@@ -6,6 +6,7 @@
 package com.liberian.auth;
 
 
+import com.department.Department;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -104,14 +105,11 @@ public class LiberianAuth {
                 .url("https://www.mshelter.tech/liberian/category/removecategory.php?table="+table+"&booktitle="+category)
                 .method("GET", null)
                 .build();
-        Response response = null;
-
-            response = client.newCall(request).execute();
-            String json = response.body().string();
-            Gson gson = new Gson();
-            Status status = gson.fromJson(json,Status.class);
-            return status.getStatus();
-
+        Response response = client.newCall(request).execute();
+        String json = response.body().string();
+        Gson gson = new Gson();
+        Status status = gson.fromJson(json,Status.class);
+        return status.getStatus();
     }
 
 
@@ -237,7 +235,43 @@ public class LiberianAuth {
         }catch (IOException e){
             return "error";
         }
+    }
 
+
+    /**
+     * This method records book in the library into the library system.
+     * @param tableName
+     * @param isbn
+     * @param bookTitle
+     * @param author
+     * @param publish_year
+     * @param category
+     * @param copies
+     * @return
+     * @throws IOException
+     */
+    public static String updateBook(String tableName, long isbn, String bookTitle,
+                                    String author, int publish_year, String category, int copies) {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/books/update_book.php?table=" +tableName+
+                        "&isbn=" +isbn+
+                        "&title=" +bookTitle +
+                        "&author=" +author +
+                        "&year=" +publish_year+
+                        "&category=" +category+
+                        "&copy=" + copies)
+                .method("GET", null)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            Gson gson = new Gson();
+            Status status = gson.fromJson(response.body().string(),Status.class);
+            return status.getStatus();
+        }catch (IOException e){
+            return "error";
+        }
     }
 
 
@@ -276,6 +310,25 @@ public class LiberianAuth {
         Gson gson = new Gson();
         BookInfosTransaction transactions = gson.fromJson(response.body().string(),BookInfosTransaction.class);
         return transactions;
+    }
+
+    /**
+     * This method retrieves the details of book during issue and return transactions
+     */
+    public static Book retrieveBook(String tableName, long isbn) throws IOException{
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/books/retrievesingle.php?table=" +tableName +
+                        "&isbn="+isbn)
+                .method("GET", null)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        Gson gson = new Gson();
+        Book book = gson.fromJson(response.body().string(),Book.class);
+        return book;
     }
 
 
@@ -411,6 +464,51 @@ public class LiberianAuth {
             result = status.getStatus();
         }
         return result;
+    }
+
+
+    public static String addDepartments(String table, String department) throws IOException {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/department/add_department.php?table="+table+"&department="+department)
+                .method("GET", null)
+                .build();
+        Response response = client.newCall(request).execute();
+        String json = response.body().string();
+        Gson gson = new Gson();
+        Status status = gson.fromJson(json,Status.class);
+        return status.getStatus();
+    }
+
+
+    public static List<Department> retrieveDepartments(String table) throws IOException {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/department/get_department.php?table="+table)
+                .method("GET", null)
+                .build();
+        Response response = client.newCall(request).execute();
+        String json = response.body().string();
+        Gson gson = new Gson();
+        Department[] departments = gson.fromJson(json,Department[].class);
+        return Arrays.asList(departments);
+    }
+
+
+    public static String removeDepartments(String table, String department) throws IOException {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url("https://www.mshelter.tech/liberian/department/remove_department.php?table="+table+"&department="+department)
+                .method("GET", null)
+                .build();
+        Response response = client.newCall(request).execute();
+        String json = response.body().string();
+        Gson gson = new Gson();
+        Status status = gson.fromJson(json,Status.class);
+        return status.getStatus();
     }
 
 

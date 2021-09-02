@@ -35,7 +35,6 @@ import java.util.List;
 public class SchoolActivity extends AppCompatActivity {
 
     static String tableName="";
-    static List<SchoolJson> schoolList = new ArrayList<>();
     static SchoolAdapter schoolAdapter;
     static RecyclerView recyclerView;
     static ProgressBar progressBar;
@@ -108,7 +107,7 @@ public class SchoolActivity extends AppCompatActivity {
 
     static class RetrieveSchoolTask extends AsyncTask<Void,Void,Void> {
         List<SchoolJson> list;
-        String result;
+        String result="";
         Context context;
 
         public RetrieveSchoolTask(Context context) {
@@ -138,20 +137,12 @@ public class SchoolActivity extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
 
-            if (result == "error"){
+            if (result.equals("error")){
                 Toast.makeText(context,"Ooops network problem.",Toast.LENGTH_SHORT).show();
             }
             else{
-                if (list == null){
-                    schoolList = new ArrayList<>();
-                    schoolAdapter = new SchoolAdapter( schoolList);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.setAdapter(schoolAdapter);
-                    recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
-                }
-                else{
-                    schoolList = list;
-                    schoolAdapter = new SchoolAdapter(schoolList);
+                if (list!=null) {
+                    schoolAdapter = new SchoolAdapter(list);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setAdapter(schoolAdapter);
                     recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
@@ -162,7 +153,7 @@ public class SchoolActivity extends AppCompatActivity {
 
 
     static class AddSchoolTask extends AsyncTask<Void,Void,Void>{
-        String result;
+        String result="";
         String school;
         String meaning;
 
@@ -196,6 +187,8 @@ public class SchoolActivity extends AppCompatActivity {
             switch (result) {
                 case "Success":
                     Toast.makeText(context,"School added Successfully",Toast.LENGTH_SHORT).show();
+                    RetrieveSchoolTask task = new RetrieveSchoolTask(context);
+                    task.execute();
                     break;
                 case "Failed":
                     Toast.makeText(context,"School already exist",Toast.LENGTH_SHORT).show();
@@ -204,8 +197,6 @@ public class SchoolActivity extends AppCompatActivity {
                     Toast.makeText(context,"Ooops network error.",Toast.LENGTH_SHORT).show();
                     break;
             }
-            RetrieveSchoolTask task = new RetrieveSchoolTask(context);
-            task.execute();
         }
     }
 

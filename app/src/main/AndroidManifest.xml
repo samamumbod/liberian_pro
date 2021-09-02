@@ -5,8 +5,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <permission android:name="android.permission.FLASHLIGHT" />
 
@@ -19,24 +19,36 @@
         android:icon="@mipmap/lib_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/lib_icon"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.LiberianPro"
         android:screenOrientation="portrait"
-        >
-
-
-        <activity android:name="com.record_book.FinalRecordActivity"
-            android:label="Record book"/>
-        <activity android:name="com.return_book.FinalReturnActivity"
-            android:label="Return book"/>
-        <activity android:name="com.issue_book.FinalIssueActivity"
-            android:label="Issue book"/>
-        <activity android:name="com.school.SchoolActivity"
-            android:label="School"/>
+        android:supportsRtl="true"
+        android:theme="@style/Theme.LiberianPro">
+        <activity android:name="com.update_book.UpdateBookActivity"
+            android:label="Update book">
+        </activity>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            />
+        <activity
+            android:name="com.department.DepartmentActivity"
+            android:label="Department" />
+        <activity
+            android:name="com.record_book.FinalRecordActivity"
+            android:label="Record book" />
+        <activity
+            android:name="com.return_book.FinalReturnActivity"
+            android:label="Return book" />
+        <activity
+            android:name="com.issue_book.FinalIssueActivity"
+            android:label="Issue book" />
+        <activity
+            android:name="com.school.SchoolActivity"
+            android:label="School" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name="com.settings.SettingsActivity"
@@ -49,23 +61,16 @@
             android:label="Return book" />
         <activity
             android:name="com.record_book.RecordBookActivity"
-            android:label="Record book" >
-
-                <intent-filter>
-                    <action android:name="android.intent.action.SCREEN_OFF"/>
-                    <action android:name="android.intent.action.SCREEN_ON"/>
-                </intent-filter>
-
-        </activity>
+            android:label="ISBN detector"></activity>
         <activity
             android:name="com.issue_book.IssueBookActivity"
             android:label="Issue book" />
         <activity
             android:name="com.signature.SignatureActivity"
-            android:label="Signature"/>
+            android:label="Signature" />
         <activity
             android:name="com.splash.SplashActivity"
-            android:theme="@style/Splash" >
+            android:theme="@style/Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,10 +82,7 @@
             android:theme="@style/Splash" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Main">
-        </activity>
-
-
+            android:theme="@style/Main" />
     </application>
 
 </manifest>

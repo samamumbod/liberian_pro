@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,7 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.SchoolHole
         holder.meaning.setText(schoolList.get(position).getMeaning());
         holder.delete.setOnClickListener(v -> {
             // Task to remove Json
-            RemoveItemTask task = new RemoveItemTask(v.getContext(),schoolList.get(position).getSchool(),position);
+            RemoveItemTask task = new RemoveItemTask(v.getContext(),schoolList.get(position).getSchool());
             task.execute();
         });
     }
@@ -57,15 +58,6 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.SchoolHole
         return schoolList.size();
     }
 
-    public void addNewSchool(SchoolJson schoolJson){
-        schoolList.add(schoolJson);
-        int pos= schoolList.indexOf(schoolJson);
-        notifyItemInserted(pos);
-    }
-
-    public void setSchoolList(List<SchoolJson> schoolList) {
-        this.schoolList = schoolList;
-    }
 
     class SchoolHoler extends RecyclerView.ViewHolder{
 
@@ -79,7 +71,6 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.SchoolHole
             delete = itemView.findViewById(R.id.imageButton2);
             school = itemView.findViewById(R.id.textView6);
             meaning = itemView.findViewById(R.id.textView8);
-
         }
     }
 
@@ -88,25 +79,26 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.SchoolHole
 
         private String school;
         private String result;
-        private int position;
         private Context context;
+        private String tableName;
 
-        public RemoveItemTask( Context context, String school, int position) {
+        public RemoveItemTask( Context context, String school) {
             this.context = context;
             this.school = school;
-            this.position = position;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            SharedPreferences preferences = context.getSharedPreferences("Liberian",context.MODE_PRIVATE);
+            tableName = preferences.getString("table","");
             Toast.makeText(context,"Removing School",Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                result = LiberianAuth.removeSchool("uba",school);
+                result = LiberianAuth.removeSchool(tableName,school);
             } catch (IOException e) {
                 result = "error";
             }
@@ -116,15 +108,20 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolAdapter.SchoolHole
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
+            System.out.println(result);
             switch (result) {
                 case "Success":
-                    Toast.makeText(context,"Schoool removed",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"School removed",Toast.LENGTH_SHORT).show();
+                    SchoolActivity.restart(context);
+                    break;
+                case "Failed":
+                    Toast.makeText(context,"School in use",Toast.LENGTH_SHORT).show();
                     break;
                 case "error":
                     Toast.makeText(context,"Ooops network problem",Toast.LENGTH_SHORT).show();
                     break;
             }
-            SchoolActivity.restart(context);
+
         }
     }
 

@@ -25,6 +25,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.liberianpro.R;
+import com.update_book.UpdateBookActivity;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -32,6 +33,7 @@ import java.lang.reflect.Field;
 
 public class RecordBookActivity extends AppCompatActivity {
 
+    String updateStatus;
     boolean isOn = true;
     private static final int MY_CAMERA_REQUEST_CODE = 101;
     ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
@@ -58,6 +60,7 @@ public class RecordBookActivity extends AppCompatActivity {
         clearButton = findViewById(R.id.button8);
         nextButton = findViewById(R.id.button9);
 
+        updateStatus = getIntent().getExtras().getString("update");
 
         startCameraSource();
 
@@ -86,16 +89,28 @@ public class RecordBookActivity extends AppCompatActivity {
         });
 
         nextButton.setOnClickListener(v -> {
-            if (!bookInfo.getText().toString().isEmpty()){
-                Intent intent = new Intent(RecordBookActivity.this, FinalRecordActivity.class);
-                intent.putExtra("isbn",bookInfo.getText().toString());
-                startActivity(intent);
+            if ("no".equals(updateStatus)){
+                if (!bookInfo.getText().toString().isEmpty()){
+                    Intent intent = new Intent(RecordBookActivity.this, FinalRecordActivity.class);
+                    intent.putExtra("isbn",bookInfo.getText().toString());
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(v.getContext(), FinalRecordActivity.class);
+                    startActivity(intent);
+                }
             }
             else{
-                Intent intent = new Intent(v.getContext(), FinalRecordActivity.class);
-                startActivity(intent);
+                if (!bookInfo.getText().toString().isEmpty()){
+                    Intent intent = new Intent(RecordBookActivity.this, UpdateBookActivity.class);
+                    intent.putExtra("isbn",bookInfo.getText().toString());
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(v.getContext(),UpdateBookActivity.class);
+                    startActivity(intent);
+                }
             }
-
         });
     }
 

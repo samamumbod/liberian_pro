@@ -23,10 +23,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         List<Option> options = new ArrayList<>();
         options.add(new Option(R.drawable.record_book_24,"Record book"));
+        options.add(new Option(R.drawable.update_book,"Update book"));
         options.add(new Option(R.drawable.issue_book_24,"Issue book"));
         options.add(new Option(R.drawable.return_book_24,"Return book"));
-        options.add(new Option(R.drawable.catergory_24,"Category"));
-        options.add(new Option(R.drawable.catergory_24,"School"));
+        options.add(new Option(R.drawable.catergory_24,"Book category"));
+        options.add(new Option(R.drawable.department,"Department"));
+        options.add(new Option(R.drawable.school,"School"));
         options.add(new Option(R.drawable.signature_24,"Signature"));
         options.add(new Option(R.drawable.setting,"Settings"));
         options.add(new Option(R.drawable.logout_24,"Log out"));
