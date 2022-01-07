@@ -193,29 +193,46 @@ public class SignatureActivity extends AppCompatActivity {
         }
 
 
+
         @Override
         protected Void doInBackground(Void... voids) {
             File file = new File(resultUri.getPath());
             File file1 = new File(Environment.getExternalStorageDirectory().toString()+"/Liberian Pro/signature.png");
 
-            try(FileInputStream in = new FileInputStream(file);
-                FileOutputStream out = new FileOutputStream(file1)){
+            FileInputStream in = null;
+            FileOutputStream out = null;
+
+            try{
+                in = new FileInputStream(file);
+                out = new FileOutputStream(file1);
                 int c;
                 while ((c = in.read())!=-1){
                     out.write(c);
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                try{
+                    if (in!=null){
+                        in.close();
+                        in=null;
+                    }
+                    if (out!=null){
+                        out.close();
+                        out = null;
+                    }
+                }catch (Exception e ){
+
+                }
+                try {
+                    File file2 = new File(Environment.getExternalStorageDirectory().toString()+"/Liberian Pro/signature.png");
+                    result = LiberianAuth.saveSignature(file2,email);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
-            try {
-                File file2 = new File(Environment.getExternalStorageDirectory().toString()+"/Liberian Pro/signature.png");
-                result = LiberianAuth.saveSignature(file2,email);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
             return null;
         }
     }

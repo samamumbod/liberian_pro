@@ -56,7 +56,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/account/signin.php?email="+email)
+                .url("http://192.168.10.1/liberian/account/signin.php?email="+email)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
@@ -78,7 +78,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/category/addcategory.php?table="+table+"&booktitle="+category)
+                .url("http://192.168.10.1/liberian/category/addcategory.php?table="+table+"&booktitle="+category)
                 .method("GET", null)
                 .build();
         Response response = null;
@@ -102,7 +102,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/category/removecategory.php?table="+table+"&booktitle="+category)
+                .url("http://192.168.10.1/liberian/category/removecategory.php?table="+table+"&booktitle="+category)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
@@ -123,7 +123,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/category/retrievecategory.php?table="+table)
+                .url("http://192.168.10.1/liberian/category/retrievecategory.php?table="+table)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
@@ -146,7 +146,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/category/addschool.php?table="+table+"&school="+school+"&meaning="+meaning)
+                .url("http://192.168.10.1/liberian/category/addschool.php?table="+table+"&school="+school+"&meaning="+meaning)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
@@ -167,7 +167,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/category/retrieveschool.php?table="+table)
+                .url("http://192.168.10.1/liberian/category/retrieveschool.php?table="+table)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
@@ -189,7 +189,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/category/removeschool.php?table="+table+"&school="+school)
+                .url("http://192.168.10.1/liberian/category/removeschool.php?table="+table+"&school="+school)
                 .method("GET", null)
                 .build();
         Response response = null;
@@ -218,7 +218,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/books/addbook.php?table=" +tableName+
+                .url("http://192.168.10.1/liberian/books/addbook.php?table=" +tableName+
                         "&isbn=" +isbn+
                         "&booktitle=" +bookTitle +
                         "&author=" +author +
@@ -255,7 +255,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/books/update_book.php?table=" +tableName+
+                .url("http://192.168.10.1/liberian/books/update_book.php?table=" +tableName+
                         "&isbn=" +isbn+
                         "&title=" +bookTitle +
                         "&author=" +author +
@@ -282,7 +282,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/transactions/retrieve_detail1.php?table=" +tableName+"&number="+number)
+                .url("http://192.168.10.1/liberian/transactions/retrieve_detail1.php?table=" +tableName+"&number="+number)
                 .method("GET", null)
                 .build();
 
@@ -300,7 +300,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/transactions/retrieve_detail2.php?table=" +tableName +
+                .url("http://192.168.10.1/liberian/transactions/retrieve_detail2.php?table=" +tableName +
                         "&isbn="+isbn)
                 .method("GET", null)
                 .build();
@@ -319,7 +319,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/books/retrievesingle.php?table=" +tableName +
+                .url("http://192.168.10.1/liberian/books/retrievesingle.php?table=" +tableName +
                         "&isbn="+isbn)
                 .method("GET", null)
                 .build();
@@ -339,7 +339,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/transactions/issue.php?table=" +tableName+
+                .url("http://192.168.10.1/liberian/transactions/issue.php?table=" +tableName+
                         "&reg_number="+regNumber+
                         "&isbn="+isbn+
                         "&issuedate="+date1+
@@ -368,7 +368,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/transactions/check_issue.php?table=" +tableName+
+                .url("http://192.168.10.1/liberian/transactions/check_issue.php?table=" +tableName+
                         "&number="+number+
                         "&isbn="+isbn)
                 .method("GET", null)
@@ -396,7 +396,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/transactions/retrieve_transaction.php?table=" +tableName+
+                .url("http://192.168.10.1/liberian/transactions/retrieve_transaction.php?table=" +tableName+
                         "&number="+regNumber+
                         "&isbn="+isbn)
                 .method("GET", null)
@@ -422,7 +422,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/transactions/return.php?table=" +tableName+
+                .url("http://192.168.10.1/liberian/transactions/return.php?table=" +tableName+
                         "&number="+number+
                         "&isbn="+isbn+
                         "&ac_return_date="+todaysDate+
@@ -440,7 +440,7 @@ public class LiberianAuth {
 
     public static String saveSignature(File file1, String email) throws IOException {
 
-        String serverURL = "https://www.mshelter.tech/liberian/setting/setting.php?email="+email;
+        String serverURL = "http://192.168.10.1/liberian/setting/setting.php?email="+email;
 
         //post request to send file
         OkHttpClient client = new OkHttpClient();
@@ -471,7 +471,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/department/add_department.php?table="+table+"&department="+department)
+                .url("http://192.168.10.1/liberian/department/add_department.php?table="+table+"&department="+department)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
@@ -486,7 +486,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/department/get_department.php?table="+table)
+                .url("http://192.168.10.1/liberian/department/get_department.php?table="+table)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();
@@ -501,7 +501,7 @@ public class LiberianAuth {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://www.mshelter.tech/liberian/department/remove_department.php?table="+table+"&department="+department)
+                .url("http://192.168.10.1/liberian/department/remove_department.php?table="+table+"&department="+department)
                 .method("GET", null)
                 .build();
         Response response = client.newCall(request).execute();

@@ -236,41 +236,45 @@ public class FinalReturnActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
             progressDialog.dismiss();
-
-            if ((transaction1!=null  && !transaction1.getAuthor().isEmpty()) &&
-                    ( transaction2!=null && !transaction2.getName().isEmpty())){
-                reg_numberField.setText(transaction2.getNumber());
-                studentNameField.setText(transaction2.getName());
-                schoolField.setText(transaction2.getSchool());
-                departmentField.setText(transaction2.getDepartment());
-                levelField.setText(String.valueOf(transaction2.getLevel()));
-                sexField.setText(transaction2.getSex());
-                isbnField.setText(String.valueOf(transaction1.getIsbn()));
-                bookTitleField.setText(transaction1.getBooktitle());
-                authorField.setText(transaction1.getAuthor());
-                issueDateField.setText(retrieveTransactionDate.getIssuedate());
-                returnDateField.setText(retrieveTransactionDate.getReturndate());
-
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
-                mMonth+=1;
-                String date1 = "";
-                if (mMonth<10 && mDay<10){
-                    date1 = mYear+"-0" + (mMonth) + "-0"+ mDay;
-                }
-                else if (mMonth<10 && mDay>9){
-                    date1 = mYear+"-0" + (mMonth) + "-"+ mDay;
-                }
-                else if (mDay < 10 && mMonth>9){
-                    date1 = mYear+"-" + (mMonth) + "-0"+ mDay;
-                }
-
-                ac_returnDateField.setText(date1);
+            if ("error".equals(result)){
+                Toast.makeText(FinalReturnActivity.this,"Ooops network problem",Toast.LENGTH_LONG).show();
             }
-            else {
-                Toast.makeText(FinalReturnActivity.this,"No record found or network problem",Toast.LENGTH_LONG).show();
+            else{
+                if ((transaction1!=null  && !transaction1.getAuthor().isEmpty()) &&
+                        ( transaction2!=null && !transaction2.getName().isEmpty())){
+                    reg_numberField.setText(transaction2.getNumber());
+                    studentNameField.setText(transaction2.getName());
+                    schoolField.setText(transaction2.getSchool());
+                    departmentField.setText(transaction2.getDepartment());
+                    levelField.setText(String.valueOf(transaction2.getLevel()));
+                    sexField.setText(transaction2.getSex());
+                    isbnField.setText(String.valueOf(transaction1.getIsbn()));
+                    bookTitleField.setText(transaction1.getBooktitle());
+                    authorField.setText(transaction1.getAuthor());
+                    issueDateField.setText(retrieveTransactionDate.getIssuedate());
+                    returnDateField.setText(retrieveTransactionDate.getReturndate());
+
+                    final Calendar c = Calendar.getInstance();
+                    int mYear = c.get(Calendar.YEAR);
+                    int mMonth = c.get(Calendar.MONTH);
+                    int mDay = c.get(Calendar.DAY_OF_MONTH);
+                    mMonth+=1;
+                    String date1 = "";
+                    if (mMonth<10 && mDay<10){
+                        date1 = mYear+"-0" + (mMonth) + "-0"+ mDay;
+                    }
+                    else if (mMonth<10 && mDay>9){
+                        date1 = mYear+"-0" + (mMonth) + "-"+ mDay;
+                    }
+                    else if (mDay < 10 && mMonth>9){
+                        date1 = mYear+"-" + (mMonth) + "-0"+ mDay;
+                    }
+
+                    ac_returnDateField.setText(date1);
+                }
+                else {
+                    Toast.makeText(FinalReturnActivity.this,"No record found",Toast.LENGTH_LONG).show();
+                }
             }
         }
     }

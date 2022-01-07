@@ -52,7 +52,7 @@
 
         <activity
             android:name="com.settings.SettingsActivity"
-            android:label="Settings" />
+            android:label="More" />
         <activity
             android:name="com.category.CategoryActivity"
             android:label="Book category" />

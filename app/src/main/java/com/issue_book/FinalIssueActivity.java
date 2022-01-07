@@ -306,21 +306,27 @@ public class FinalIssueActivity extends AppCompatActivity {
             super.onPostExecute(unused);
             progressDialog.dismiss();
 
-            if ((transaction1!=null  && !transaction1.getAuthor().isEmpty()) &&
-                    ( transaction2!=null && !transaction2.getName().isEmpty())){
-                reg_numberField.setText(transaction2.getNumber());
-                studentNameField.setText(transaction2.getName());
-                schoolField.setText(transaction2.getSchool());
-                departmentField.setText(transaction2.getDepartment());
-                levelField.setText(String.valueOf(transaction2.getLevel()));
-                sexField.setText(transaction2.getSex());
-                isbnField.setText(String.valueOf(transaction1.getIsbn()));
-                bookTitleField.setText(transaction1.getBooktitle());
-                authorField.setText(transaction1.getAuthor());
+            if ("error".equals(result)){
+                Toast.makeText(FinalIssueActivity.this,"Ooops network problem",Toast.LENGTH_LONG).show();
             }
             else{
-                Toast.makeText(FinalIssueActivity.this,"No record found or network problem",Toast.LENGTH_LONG).show();
+                if ((transaction1!=null  && !transaction1.getAuthor().isEmpty()) &&
+                        ( transaction2!=null && !transaction2.getName().isEmpty())){
+                    reg_numberField.setText(transaction2.getNumber());
+                    studentNameField.setText(transaction2.getName());
+                    schoolField.setText(transaction2.getSchool());
+                    departmentField.setText(transaction2.getDepartment());
+                    levelField.setText(String.valueOf(transaction2.getLevel()));
+                    sexField.setText(transaction2.getSex());
+                    isbnField.setText(String.valueOf(transaction1.getIsbn()));
+                    bookTitleField.setText(transaction1.getBooktitle());
+                    authorField.setText(transaction1.getAuthor());
+                }
+                else{
+                    Toast.makeText(FinalIssueActivity.this,"No record found",Toast.LENGTH_LONG).show();
+                }
             }
+
         }
     }
 

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         options.add(new Option(R.drawable.department,"Department"));
         options.add(new Option(R.drawable.school,"School"));
         options.add(new Option(R.drawable.signature_24,"Signature"));
-        options.add(new Option(R.drawable.setting,"Settings"));
+        options.add(new Option(R.drawable.more,"More"));
         options.add(new Option(R.drawable.logout_24,"Log out"));
         recyclerView = findViewById(R.id.recycler);
         MainAdapter mainAdapter = new MainAdapter(options);

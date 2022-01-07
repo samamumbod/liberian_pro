@@ -70,7 +70,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder> {
                 case "Signature":
                     v.getContext().startActivity(new Intent(v.getContext(), SignatureActivity.class));
                     break;
-                case "Settings":
+                case "More":
                     v.getContext().startActivity(new Intent(v.getContext(), SettingsActivity.class));
                     break;
                 case "Log out":

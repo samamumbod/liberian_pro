@@ -168,7 +168,7 @@ public class DepartmentActivity extends AppCompatActivity {
 
     static class RetrieveDepartmentTask extends AsyncTask<Void,Void,Void>{
 
-        List<Department> list;
+        List<Department> list = null;
         String result = "";
         Context context;
 
