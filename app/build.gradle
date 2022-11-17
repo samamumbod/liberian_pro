@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion '31.0.0 rc4'
+    compileSdkVersion 32
+    buildToolsVersion '33.0.0'
 
     defaultConfig {
         applicationId "com.liberianpro"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -31,6 +31,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.liberianpro'
 }
 
 dependencies {
@@ -43,7 +44,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.kyanogen.signatureview:signature-view:1.2'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

@@ -83,12 +83,7 @@ public class SignInActivity extends AppCompatActivity {
             if (result !=null && !result.isEmpty()){
                 if (result.equals("error")) {
                     dialog.setMessage("Ooops network problem.");
-                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Okay", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
+                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Okay", (dialog, which) -> dialog.dismiss());
                     dialog.show();
                 }
                 else{

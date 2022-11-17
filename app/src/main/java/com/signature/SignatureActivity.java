@@ -1,9 +1,6 @@
 package com.signature;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,16 +8,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kyanogen.signatureview.SignatureView;
 import com.liberian.auth.LiberianAuth;
@@ -30,11 +28,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import kotlin.ranges.UIntRange;
 
 public class SignatureActivity extends AppCompatActivity {
 
@@ -75,6 +70,7 @@ public class SignatureActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     class SaveTask extends AsyncTask<Void,Void,Void>{
         Context context;
         Bitmap bitmap;
@@ -96,9 +92,7 @@ public class SignatureActivity extends AppCompatActivity {
             progressDialog.show();
 
             alertDialog = new AlertDialog.Builder(context).create();
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Okay",(dialog, which) -> {
-                dialog.dismiss();
-            });
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Okay",(dialog, which) -> dialog.dismiss());
 
             File file = new File(Environment.getExternalStorageDirectory().toString()+"/Liberian Pro");
             if (!file.exists()){
@@ -126,7 +120,7 @@ public class SignatureActivity extends AppCompatActivity {
             try(FileOutputStream outputStream = new FileOutputStream(file)){
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             }catch (IOException e){
-
+                e.printStackTrace();
             }
             return null;
         }
@@ -148,6 +142,7 @@ public class SignatureActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     class UploadTask extends AsyncTask<Void,Void,Void>{
         Context context;
         String result;
@@ -171,9 +166,7 @@ public class SignatureActivity extends AppCompatActivity {
             progressDialog.show();
 
             alertDialog = new AlertDialog.Builder(context).create();
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Okay",(dialog, which) -> {
-                dialog.dismiss();
-            });
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Okay",(dialog, which) -> dialog.dismiss());
 
         }
 
@@ -215,11 +208,9 @@ public class SignatureActivity extends AppCompatActivity {
                 try{
                     if (in!=null){
                         in.close();
-                        in=null;
                     }
                     if (out!=null){
                         out.close();
-                        out = null;
                     }
                 }catch (Exception e ){
 

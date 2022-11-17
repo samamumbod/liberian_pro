@@ -1,9 +1,5 @@
 package com.issue_book;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,15 +8,16 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -31,7 +28,6 @@ import com.liberianpro.R;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.regex.Pattern;
 
 public class IssueBookActivity extends AppCompatActivity {
 
@@ -70,7 +66,7 @@ public class IssueBookActivity extends AppCompatActivity {
 
         onTorch.setOnClickListener(v -> {
             if (isOn){
-                onTorch.setImageDrawable(getDrawable(R.drawable.ic_baseline_flash_on_24));
+                onTorch.setImageDrawable(AppCompatResources.getDrawable(IssueBookActivity.this, R.drawable.ic_baseline_flash_on_24));
                 if (camera != null){
                     Camera.Parameters p = camera.getParameters();
                     p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -80,7 +76,7 @@ public class IssueBookActivity extends AppCompatActivity {
                 isOn = false;
             }
             else{
-                onTorch.setImageDrawable(getDrawable(R.drawable.ic_baseline_flash_off_24));
+                onTorch.setImageDrawable(AppCompatResources.getDrawable(IssueBookActivity.this,R.drawable.ic_baseline_flash_off_24));
                 Camera.Parameters p = camera.getParameters();
                 p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                 camera.setParameters(p);
@@ -117,11 +113,7 @@ public class IssueBookActivity extends AppCompatActivity {
             if (field.getType() == Camera.class) {
                 field.setAccessible(true);
                 try {
-                    Camera camera = (Camera) field.get(cameraSource);
-                    if (camera != null) {
-                        return camera;
-                    }
-                    return null;
+                    return (Camera) field.get(cameraSource);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -157,7 +149,7 @@ public class IssueBookActivity extends AppCompatActivity {
                         camera = getCamera(cameraSource);
                     }
                 } catch (IOException ie) {
-                    System.err.println(ie);
+                    ie.printStackTrace();
 //                    camera.release();
 //                    camera=null;
                 }

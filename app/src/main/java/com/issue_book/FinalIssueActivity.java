@@ -1,8 +1,6 @@
 package com.issue_book;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -17,26 +15,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.liberian.auth.BookInfosTransaction;
 import com.liberian.auth.LiberianAuth;
 import com.liberian.auth.StudentInfosTransaction;
 import com.liberianpro.R;
-import com.return_book.FinalReturnActivity;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class FinalIssueActivity extends AppCompatActivity {
@@ -183,9 +176,7 @@ public class FinalIssueActivity extends AppCompatActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
                 alertDialog.setTitle("Error");
                 alertDialog.setMessage("Empty fields");
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Okay", (dialog, which) -> {
-                    dialog.dismiss();
-                });
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Okay", (dialog, which) -> dialog.dismiss());
                 alertDialog.show();
             }
         });
@@ -239,9 +230,7 @@ public class FinalIssueActivity extends AppCompatActivity {
             else {
                 Toast.makeText(this,"Invalid data", Toast.LENGTH_SHORT).show();
             }
-        }).setNegativeButton("Cancel", (dialog1, which) -> {
-            dialog1.dismiss();
-        });
+        }).setNegativeButton("Cancel", (dialog1, which) -> dialog1.dismiss());
 
         AlertDialog dialog =  builder.create();
         dialog.show();
@@ -262,6 +251,7 @@ public class FinalIssueActivity extends AppCompatActivity {
      * This class retrieves the details of student and book for the issueing of the desired
      * book.
      */
+    @SuppressLint("StaticFieldLeak")
     class RetrieveDetailsForTransacntionTask extends AsyncTask<Void,Void,Void>{
 
         String isbn;
@@ -335,6 +325,7 @@ public class FinalIssueActivity extends AppCompatActivity {
      * This class issues the book out of the library and
      * stores it in the database.
      */
+    @SuppressLint("StaticFieldLeak")
     class IssueTransanctionTask extends AsyncTask<Void,Void,Void>{
 
         String result;

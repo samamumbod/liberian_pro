@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -88,9 +89,7 @@ public class DepartmentActivity extends AppCompatActivity {
                 AddDepartmentTask task = new AddDepartmentTask(context,result);
                 task.execute();
             }
-        }).setNegativeButton("Cancel", (dialog1, which) -> {
-            dialog1.dismiss();
-        });
+        }).setNegativeButton("Cancel", (dialog1, which) -> dialog1.dismiss());
 
         final AlertDialog alertDialog = dialog.create();
         alertDialog.show();
@@ -124,6 +123,7 @@ public class DepartmentActivity extends AppCompatActivity {
 
     static class AddDepartmentTask extends AsyncTask<Void,Void,Void>{
 
+        @SuppressLint("StaticFieldLeak")
         Context context;
         String department;
         String result;

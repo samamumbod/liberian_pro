@@ -1,8 +1,6 @@
 package com.update_book;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -26,12 +24,12 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.issue_book.FinalIssueActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.liberian.auth.Book;
-import com.liberian.auth.BookInfosTransaction;
 import com.liberian.auth.CategoryJson;
 import com.liberian.auth.LiberianAuth;
-import com.liberian.auth.StudentInfosTransaction;
 import com.liberianpro.R;
 import com.record_book.RecordBookActivity;
 
@@ -147,9 +145,7 @@ public class UpdateBookActivity extends AppCompatActivity {
         });
 
 
-        categoryButton.setOnClickListener(v->{
-            showBookCategoryDialog(v.getContext());
-        });
+        categoryButton.setOnClickListener(v-> showBookCategoryDialog(v.getContext()));
 
     }
 
@@ -170,9 +166,7 @@ public class UpdateBookActivity extends AppCompatActivity {
             if (bookCategorySpinner.getSelectedItemPosition() != 0){
                 bookCategoryField.setText(bookCategorySpinner.getSelectedItem().toString());
             }
-        }).setNegativeButton("Cancel", (dialog1, which) -> {
-            dialog1.dismiss();
-        });
+        }).setNegativeButton("Cancel", (dialog1, which) -> dialog1.dismiss());
 
         final AlertDialog dialog =  builder.create();
         dialog.show();
@@ -304,9 +298,7 @@ public class UpdateBookActivity extends AppCompatActivity {
             else{
                 Toast.makeText(context,"Invalid ISBN",Toast.LENGTH_SHORT).show();
             }
-        }).setNegativeButton("Cancel", (dialog1, which) -> {
-            dialog1.dismiss();
-        });
+        }).setNegativeButton("Cancel", (dialog1, which) -> dialog1.dismiss());
 
         final AlertDialog dialog =  builder.create();
         dialog.show();
@@ -367,6 +359,7 @@ public class UpdateBookActivity extends AppCompatActivity {
     /***
      * This method retrieves book so that the liberian can select.
      */
+    @SuppressLint("StaticFieldLeak")
     class RetrieveBookTask extends AsyncTask<Void,Void,Void>{
 
         List<CategoryJson> list;
@@ -424,6 +417,7 @@ public class UpdateBookActivity extends AppCompatActivity {
      * This class retrieves the details of student and book for the issueing of the desired
      * book.
      */
+    @SuppressLint("StaticFieldLeak")
     class RetrieveBookDetails extends AsyncTask<Void,Void,Void>{
 
         String isbn;

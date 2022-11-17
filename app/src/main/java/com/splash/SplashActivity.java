@@ -1,5 +1,6 @@
 package com.splash;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import com.liberianpro.MainActivity;
 import com.liberianpro.R;
 import com.signin.SignInActivity;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
     @Override
